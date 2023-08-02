@@ -1,0 +1,122 @@
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12 text-center">
+              <div class="breadcrumb__text">
+                  <h2>Checkout</h2>
+                  <div class="breadcrumb__option">
+                      <a href="./index.html">Home</a>
+                      <span>Checkout</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12">
+              <h6><span class="icon_tag_alt"></span> Have a coupon? <a href="#">Click here</a> to enter your code
+              </h6>
+          </div>
+      </div>
+      <div class="checkout__form">
+          <h4>Thông tin đặt hàng</h4>
+          <form  [formGroup]="formCus" (ngSubmit)="onSubmit(formCus.value)">
+              <div class="row">
+                  <div class="col-lg-8 col-md-6">
+                      <div class="row">
+                          <div class="col-lg-6">
+                              <div class="checkout__input">
+                                  <p for="txt_hoten">Họ và tên<span>*</span>
+                                    <span *ngIf="hoten.invalid && (hoten.dirty || hoten.touched)">
+                                      <span *ngIf="hoten.errors?.['required']">Họ tên không được rỗng</span>
+                                      <span *ngIf="hoten.errors?.['minlength']">
+                                          Họ tên không được nhỏ hơn 3 ký tự
+                                      </span>
+                                      <span *ngIf="hoten.errors?.['maxlength']">
+                                          Họ tên không được lớn hơn 20 ký tự
+                                      </span>
+                                  </span></p>
+                                  <input placeholder="Họ và tên quý khách" formControlName="txt_hoten" type="text" ngModel>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="checkout__input">
+                          <p for="txt_diachi">Địa chỉ<span>*</span>
+                              <span *ngIf="diachi.invalid && (diachi.dirty || diachi.touched)">
+                              <span *ngIf="diachi.errors?.['required']">Địa chỉ không được rỗng</span>
+                          </span></p>
+                          <input placeholder="Địa chỉ quý khách" formControlName="txt_diachi" type="text" ngModel>
+
+                      </div>
+
+                      <div class="row">
+                          <div class="col-lg-6">
+                              <div class="checkout__input">
+                                  <p for="txt_sodienthoai">Số điện thoại<span>*</span>
+                                    <span *ngIf="sodienthoai.invalid && (sodienthoai.dirty || sodienthoai.touched)">
+                                    <span *ngIf="sodienthoai.errors?.['required']">Số điện thoại không được rỗng</span>
+                                    <span *ngIf="sodienthoai.errors?.['pattern']">Không đúng định dạng số điện thoại</span>
+                                </span></p>
+                                  <input placeholder="Số điện thoại" formControlName="txt_sodienthoai" type="text" ngModel>
+                              </div>
+                          </div>
+                          <div class="col-lg-6">
+                              <div class="checkout__input">
+                                  <p for="txt_email" >Email<span>*</span>
+                                    <span *ngIf="email.invalid && (email.dirty || email.touched)">
+                                      <span *ngIf="email.errors?.['required']">Email không được rỗng</span>
+                                    <span *ngIf="email.errors?.['email']">Không đúng định dạng của email</span>
+                                  </span></p>
+                                  <input placeholder="Email quý khách" formControlName="txt_email" type="text" ngModel>
+                              </div>
+                          </div>
+                      </div>
+
+
+                      <div class="checkout__input">
+                          <p for="txt_ghichu">Ghi chú<span></span></p>
+                          <input placeholder="ghi chú" formControlName="txt_ghichu" type="text" ngModel>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6">
+                      <div class="checkout__order" *ngFor="let sp of items">
+                          <h4>Sản phẩm mua</h4>
+                          <div class="checkout__order__products">Sản phẩm <span>Đơn giá</span></div>
+                          <ul>
+                              <li>{{sp.tenSanPham}}*{{sp.quantity}} <span>{{sp.gia}} $</span></li>
+
+                          </ul>
+                          <!-- <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div> -->
+                          <div class="checkout__order__total">Tổng tiền <span>{{sp.quantity * sp.gia}} $</span></div>
+
+                          <div class="checkout__input__checkbox">
+                              <label for="payment">
+                                  Check Payment
+                                  <input type="checkbox" id="payment">
+                                  <span class="checkmark"></span>
+                              </label>
+                          </div>
+                          <div class="checkout__input__checkbox">
+                              <label for="paypal">
+                                  Paypal
+                                  <input type="checkbox" id="paypal">
+                                  <span class="checkmark"></span>
+                              </label>
+                          </div>
+                          <button [disabled]="formCus.invalid"  type="submit" class="site-btn">Đặt hàng</button>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</section>
+<!-- Checkout Section End -->
