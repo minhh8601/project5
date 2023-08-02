@@ -1,0 +1,212 @@
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+
+          <div class="row page-titles mx-0">
+              <div class="col p-md-0">
+                  <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+                      <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+                  </ol>
+              </div>
+          </div>
+          <!-- row -->
+
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-12">
+                      <div class="card">
+                          <div class="card-body">
+                            <div class="table-responsive">
+                              <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                                <div class="row">
+                                  <form [formGroup]="formSearch" (ngSubmit)="LoadData()">
+                                    <div class="form-group" style="display: flex;">
+                                      <label class="col-lg-2 control-label" style="text-align: center;padding-top: 10px;">Tên Sản phẩm:</label>
+                                      <div class="col-lg-6">
+                                      <input formControlName="txt_tenSanPham" style="height: 10px;width: 200px;" type="text" class="form-control" placeholder="Tên sản phẩm">
+                                      </div>
+                                      <div class="col-lg-6">
+                                      <input formControlName="txt_gia" style="height: 10px;width: 200px;" type="text" class="form-control" placeholder="Gía tiền">
+                                      </div>
+
+                                    </div>
+                                    <div class="col-lg-4 text-right">
+                                      <button type="submit" class="btn btn-primary"><i class="icon-search4 position-right"></i> Tìm kiếm</button>
+                                    </div>
+                                  </form>
+                              </div>
+                              <h4 class="card-title">Quản lý sản phẩm</h4>
+                              <button (click)="KhoiTaoModal()"  type="button" class="btn mb-1 btn-rounded btn-primary">Thêm sản phẩm</button>
+
+                                  <table class="table table-striped table-bordered zero-configuration">
+                                      <thead>
+                                          <tr>
+                                              <th>Id danh mục</th>
+                                              <th><a (click)="sortBy('tenSanPham')">Tên sản phẩm {{sortIcon('tenSanPham')}}</a></th>
+                                              <th>Mô tả sản phẩm</th>
+                                              <th>Ảnh</th>
+                                              <th><a (click)="sortBy('gia')">Giá tiền {{sortIcon('gia')}}</a></th>
+                                              <th>Đơn vị tính</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody  >
+                                          <tr *ngFor="let item of list_sp | paginate: { itemsPerPage: 6, currentPage: p}">
+                                              <td>{{item.idDanhMuc}}</td>
+                                              <td>{{item.tenSanPham}}</td>
+                                              <td>{{item.moTaSanPham}}</td>
+                                              <td><img style="height: 100px; width: 100px;" src="{{item.anh}}" alt=""></td>
+                                              <td>{{item.gia}}</td>
+                                              <td>{{item.donViTinh}}</td>
+                                              <td>
+                                                <ul>
+                                                  <li><a (click)="CapNhatModel(item.idSanPham)" ><i class="ti-marker-alt"></i></a></li>
+                                                  <br>
+                                                  <li><a (click)="XoaSP(item.idSanPham)" ><i class="ti-trash"></i></a></li>
+                                                </ul>
+                                              </td>
+                                          </tr>
+
+
+                                      </tbody>
+                                      <tfoot>
+                                          <tr>
+                                            <th>Id danh mục</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Mô tả sản phẩm</th>
+                                            <th>Ảnh</th>
+                                            <th>Giá tiền</th>
+                                            <th>Đơn vị tính</th>
+                                          </tr>
+                                      </tfoot>
+                                  </table>
+                              </div>
+                              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+
+                            <!-- Thêm sản phẩm -->
+                            <div *ngIf="hienModal" id="createSPModal" class="modal fade">
+                              <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title">Thêm sản phẩm mới</h5>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  </div>
+                                  <hr>
+                                  <form *ngIf="suscessForm" [formGroup]="formSP"  (ngSubmit)="OnSubmit(formSP.value)" class="form-horizontal">
+                                    <div class="modal-body" style="padding-left: 50px !important; padding-right:50px !important;">
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Id Danh mục<span style="color:red ;">*</span>:</label>
+                                        <div class="col-lg-9">
+                                          <input formControlName="txt_idDanhMuc" type="text" class="form-control"
+                                            placeholder="ID danh mục">
+                                          <div *ngIf="idDanhMuc.invalid && (idDanhMuc.dirty || idDanhMuc.touched)">
+                                            <div *ngIf="idDanhMuc.errors?.['required']" style="color:red ;">Id Danh mục không được trống!
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Tên sản phẩm<span style="color:red ;">*</span></label>
+                                        <div class="col-lg-9">
+                                          <input formControlName="txt_tenSanPham" type="text" class="form-control" placeholder="Tên sản phẩm">
+                                          <div *ngIf="tenSanPham.invalid && (tenSanPham.dirty || tenSanPham.touched)">
+                                            <div *ngIf="tenSanPham.errors?.['required']" style="color:red ;">Tên sản phẩm không được trống!</div>
+                                            <div *ngIf="tenSanPham.errors?.['minlength']" style="color:red ;"> Tên sản phẩm tối thiểu 5 kí tự!
+                                            </div>
+                                            <div *ngIf="tenSanPham.errors?.['maxlength']" style="color:red ;">Tên sản phẩm tối đa 250 kí tự!
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Mô tả sản phẩm<span style="color:red ;">*</span></label>
+                                        <div class="col-lg-9">
+                                          <!-- <input formControlName="txt_moTaSanPham" type="text" class="form-control" placeholder="Mô tả sản phẩm"> -->
+                                          <textarea formControlName="txt_moTaSanPham" class="form-control h-150px" rows="6" id="comment"></textarea>
+                                          <div *ngIf="moTaSanPham.invalid && (moTaSanPham.dirty || tenSanPham.touched)">
+                                            <div *ngIf="moTaSanPham.errors?.['required']" style="color:red ;">Mô tả không được trống!</div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Ảnh<span style="color:red ;">*</span>:</label>
+                                        <div class="col-lg-9">
+                                          <input (change)="upload($event)" accept=".jpg,.png,.jpeg,.gif,.bmp,.tif,.tiff" formControlName="txt_anh" type="file" class="form-control"
+                                            placeholder="Ảnh sản phẩm">
+
+                                            <!-- <input (change)="upload($event)" accept=".jpg,.png,.jpeg,.gif,.bmp,.tif,.tiff"
+                                            type="file" class="file-styled"> -->
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Id nhà sản xuất</label>
+                                        <div class="col-lg-9">
+                                          <input formControlName="txt_idNhaSanXuat" type="text" class="form-control" placeholder="Id nhà sản xuất">
+                                          <div *ngIf="idNhaSanXuat.invalid && (idNhaSanXuat.dirty || idNhaSanXuat.touched)">
+                                            <div *ngIf="idNhaSanXuat.errors?.['required']" style="color:red ;">Id không được để trống!
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Gía</label>
+                                        <div class="col-lg-9">
+                                          <input formControlName="txt_gia" type="text" class="form-control" placeholder="Gía sản phẩm">
+                                            <div *ngIf="gia.invalid && (gia.dirty || gia.touched)">
+                                            <div *ngIf="gia.errors?.['required']" style="color:red ;"> Gía không được trống!</div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Đơn vị tính</label>
+                                        <div class="col-lg-9">
+                                          <input formControlName="txt_donViTinh" type="text" class="form-control" placeholder="Đơn vị tính">
+                                            <div *ngIf="donViTinh.invalid && (donViTinh.dirty || donViTinh.touched)">
+                                            <div *ngIf="donViTinh.errors?.['required']" style="color:red ;">Đơn vị không được trống!
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label class="col-lg-3 control-label">Ngày tạo</label>
+                                        <div class="col-lg-9">
+                                          <input formControlName="txt_ngayTao" type="date" class="form-control" placeholder="Ngày tạo">
+                                            <div *ngIf="ngayTao.invalid && (ngayTao.dirty || ngayTao.touched)">
+                                            <div *ngIf="ngayTao.errors?.['required']" style="color:red ;"> Ngày tạo không được trống!</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr>
+                                      <div class="modal-footer">
+
+                                        <button type="submit" class="btn btn-primary" [disabled]="formSP.invalid">Lưu</button>
+                                      </div>
+                                  </form>
+                                </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+          <!-- #/ container -->
+      <!--**********************************
+          Content body end
+      ***********************************-->
+
+
